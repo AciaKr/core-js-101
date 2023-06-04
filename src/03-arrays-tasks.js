@@ -295,16 +295,19 @@ function getSecondItems(arr) {
  *  [ 'a', 'b', 'c', null ] => [ 'a', 'b','b', 'c','c','c',  null,null,null,null ]
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
-  // return arr.reduce((acc, item, index) => {
-  //   let num = 0;
-  //   if (num < index + 1) {
-  //     acc.push(item);
-  //     num += 1;
-  //   }
-  //   return acc;
-  // }, []);
+function propagateItemsByPositionIndex(arr) {
+  return arr.reduce((acc, item, index) => {
+    let num = index + 1;
+    function fu() {
+      if (num > 0) {
+        acc.push(item);
+        num -= 1;
+        fu();
+      }
+    }
+    fu();
+    return acc;
+  }, []);
 }
 
 
@@ -321,8 +324,8 @@ function propagateItemsByPositionIndex(/* arr */) {
  *   [ 1,2,3,4,5,6,7,8,9,10 ] => [ 10, 9, 8 ]
  *   [ 10, 10, 10, 10 ] => [ 10, 10, 10 ]
  */
-function get3TopItems(/* arr */) {
-  throw new Error('Not implemented');
+function get3TopItems(arr) {
+  return arr.sort((a, b) => a - b).reverse().slice(0, 3);
 }
 
 
@@ -339,14 +342,11 @@ function get3TopItems(/* arr */) {
  *   [ null, 1, 'elephant' ] => 1
  *   [ 1, '2' ] => 1
  */
-function getPositivesCount(/* arr */) {
-  throw new Error('Not implemented');
-  // return arr.reduce((acc, item) => {
-  //   if (typeof item === 'number' && item > 0) {
-  //     acc.push(item);
-  //   }
-  //   return acc.pop();
-  // }, []);
+function getPositivesCount(arr) {
+  return arr.reduce((acc, item) => {
+    if (item && typeof item === 'number' && item > 0) acc.push(item);
+    return acc;
+  }, []).length;
 }
 
 /**
@@ -364,6 +364,24 @@ function getPositivesCount(/* arr */) {
  */
 function sortDigitNamesByNumericOrder(/* arr */) {
   throw new Error('Not implemented');
+  // const numbers = {
+  //   one: 1,
+  //   two: 2,
+  //   three: 3,
+  //   four: 4,
+  //   five: 5,
+  //   six: 6,
+  //   seven: 7,
+  //   eight: 8,
+  //   nine: 9,
+  // };
+  // return arr.reduce((acc, item) => {
+  //   acc.push(numbers[item]);
+  //   return acc;
+  // }, []).sort((a, b) => a - b).reduce((acc, item) => {
+  //   acc.push(numbers[item]);
+  //   return acc;
+  // }, []);
 }
 
 /**
@@ -503,8 +521,14 @@ function getIdentityMatrix(/* n */) {
  *     0, 100 => [ 0, 1, 2, ..., 100 ]
  *     3, 3   => [ 3 ]
  */
-function getIntervalArray(/* start, end */) {
-  throw new Error('Not implemented');
+function getIntervalArray(start, end) {
+  const arr = '0'.repeat(end - start + 1).split('');
+  let num = start;
+  return arr.reduce((acc) => {
+    acc.push(num);
+    num += 1;
+    return acc;
+  }, []);
 }
 
 /**
