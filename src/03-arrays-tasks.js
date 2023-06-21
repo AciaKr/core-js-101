@@ -163,8 +163,8 @@ function getStringsLength(arr) {
  *    [ 1, 3, 4, 5 ], 2, 1  => [ 1, 2, 3, 4, 5 ]
  *    [ 1, 'b', 'c'], 'x', 0  => [ 'x', 1, 'b', 'c' ]
  */
-function insertItem(/* arr, item, index */) {
-  throw new Error('Not implemented');
+function insertItem(arr, item, index) {
+  return arr.splice(index, 0, item);
 }
 
 /**
@@ -362,26 +362,12 @@ function getPositivesCount(arr) {
  *   [ 'nine','eight','nine','eight'] => [ 'eight','eight','nine','nine']
  *   [ 'one','one','one','zero' ]     => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
-  // const numbers = {
-  //   one: 1,
-  //   two: 2,
-  //   three: 3,
-  //   four: 4,
-  //   five: 5,
-  //   six: 6,
-  //   seven: 7,
-  //   eight: 8,
-  //   nine: 9,
-  // };
-  // return arr.reduce((acc, item) => {
-  //   acc.push(numbers[item]);
-  //   return acc;
-  // }, []).sort((a, b) => a - b).reduce((acc, item) => {
-  //   acc.push(numbers[item]);
-  //   return acc;
-  // }, []);
+function sortDigitNamesByNumericOrder(arr) {
+  const digitsComparator = (a, b) => {
+    const mapper = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    return mapper.indexOf(a) - mapper.indexOf(b);
+  };
+  return arr.sort(digitsComparator);
 }
 
 /**
@@ -482,8 +468,14 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  return arr.sort((a, b) => {
+    if (a.country < b.country) return -1;
+    if (a.country === b.country) {
+      if (a.city < b.city) return -1;
+    }
+    return 0;
+  });
 }
 
 /**
@@ -504,8 +496,17 @@ function sortCitiesArray(/* arr */) {
  *           [0,0,0,1,0],
  *           [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  let index = 0;
+  const arr = new Array(n).fill(0);
+  arr.map(() => {
+    const tmp = new Array(n).fill(0);
+    tmp[index] = 1;
+    index += 1;
+    arr[index - 1] = tmp;
+    return arr;
+  });
+  return arr;
 }
 
 /**
@@ -579,8 +580,20 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+  return array.reduce((obj, item) => {
+    const key = keySelector(item);
+    const value = valueSelector(item);
+    if (obj.get(key)) {
+      const val = obj.get(key);
+      val.push(value);
+      obj.set(key, val);
+    } else {
+      obj.set(key, [value]);
+    }
+    return obj;
+  }, map);
 }
 
 
@@ -597,10 +610,10 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], (x) => x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
-}
 
+function selectMany(arr, childrenSelector) {
+  return arr.reduce((acc, currVal) => acc.concat(childrenSelector(currVal)), []);
+}
 
 /**
  * Returns an element from the multidimensional array by the specified indexes.
@@ -614,8 +627,8 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  return indexes.reduce((obj, prop) => obj[prop], arr);
 }
 
 
@@ -637,8 +650,18 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  if (arr.length < 2) {
+    return arr;
+  }
+  const mid = Math.floor(arr.length / 2);
+  const head = arr.slice(0, mid);
+  if ((arr.length / 2) % 1) {
+    const tail = arr.slice(mid + 1);
+    return tail.concat(arr[mid], head);
+  }
+  const tail = arr.slice(mid);
+  return tail.concat(head);
 }
 
 
